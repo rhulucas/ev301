@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">A09-BT</string>
+    <string name="menu_first">1. Grant Permission</string>
+    <string name="menu_second">2. Search BT List</string>
+    <string name="menu_third">3. Connect to EV3</string>
+    <string name="menu_forth">4. EV3 Move Forward</string>
+    <string name="menu_fifth">5. EV3 Play Tune</string>
+    <string name="menu_sixth">6. Disconnect EV3</string>
+</resources>
