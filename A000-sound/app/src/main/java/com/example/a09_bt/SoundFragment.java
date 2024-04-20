@@ -11,12 +11,16 @@ import androidx.fragment.app.Fragment;
 public class SoundFragment extends Fragment {
     private EV3Service mref_ev3;
     private Button buttonSound2;
+    private Button buttonSound3;
+    private Button buttonSound1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_move, container, false);
         // Initialize views and set up UI components
+        buttonSound1 = rootView.findViewById(R.id.buttonSound1);
         buttonSound2 = rootView.findViewById(R.id.buttonSound2);
+        buttonSound3 = rootView.findViewById(R.id.buttonSound3);
         return rootView;
 
     }
@@ -30,12 +34,42 @@ public class SoundFragment extends Fragment {
 
         // Setup the button listener for buttonSound2
 
+
+        buttonSound1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mref_ev3 != null) {
+                    try {
+                        mref_ev3.mf_EV3SendNoReplyCmd("PlayToneFile_0x94_sound1");
+                    } catch (Exception e) {
+                        // Handle the exception
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+
         buttonSound2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mref_ev3 != null) {
                     try {
                         mref_ev3.mf_EV3SendNoReplyCmd("PlayToneFile_0x94_sound2");
+                    } catch (Exception e) {
+                        // Handle the exception
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        buttonSound3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mref_ev3 != null) {
+                    try {
+                        mref_ev3.mf_EV3SendNoReplyCmd("PlayToneFile_0x94_sound3");
                     } catch (Exception e) {
                         // Handle the exception
                         e.printStackTrace();
