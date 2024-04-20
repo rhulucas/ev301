@@ -13,34 +13,22 @@
         android:text="Hello World!"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintHorizontal_bias="0.481"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.27" />
+        app:layout_constraintVertical_bias="0.082" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/vv_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vv_tvOut2"
-        app:layout_constraintVertical_bias="0.184" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_manage" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.132" />
 
     <TextView
         android:id="@+id/vv_tvOut1"
@@ -49,48 +37,178 @@
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/vv_tvOut2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.456"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.393" />
+        app:layout_constraintVertical_bias="0.463" />
 
-    <Button
-        android:id="@+id/buttonSound1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onSound1Click"
-        android:text="Sound 1"
+    <ImageButton
+        android:id="@+id/vv_down1"
+        android:layout_width="90dp"
+        android:layout_height="89dp"
+        android:layout_marginStart="3dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/bluedown"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button"
-        app:layout_constraintVertical_bias="0.158" />
+        app:layout_constraintHorizontal_bias="0.339"
+        app:layout_constraintStart_toEndOf="@+id/vv_up1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.73" />
 
-    <Button
-        android:id="@+id/buttonSound2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onSound2Click"
-        android:text="Sound 2"
+    <SeekBar
+        android:id="@+id/vv_slider"
+        android:layout_width="200dp"
+        android:layout_height="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.144"
+        app:layout_constraintHorizontal_bias="0.74"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.746" />
+        app:layout_constraintVertical_bias="0.585" />
 
-    <Button
-        android:id="@+id/buttonSound3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onSound3Click"
-        android:text="Sound 3"
+    <TextView
+        android:id="@+id/vv_text2"
+        android:layout_width="73dp"
+        android:layout_height="24dp"
+        android:text="Power"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.868"
+        app:layout_constraintHorizontal_bias="0.212"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.746" />
+        app:layout_constraintVertical_bias="0.822" />
 
+    <SeekBar
+        android:id="@+id/vv_slider2"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.778"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.817" />
+
+    <TextView
+        android:id="@+id/vv_text"
+        android:layout_width="66dp"
+        android:layout_height="25dp"
+        android:text="power"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.208"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.591" />
+
+    <ImageButton
+        android:id="@+id/vv_up1"
+        android:layout_width="91dp"
+        android:layout_height="88dp"
+        android:layout_marginEnd="3dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/blueup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/vv_down1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.73" />
+
+    <ImageButton
+        android:id="@+id/vv_forward"
+        android:layout_width="99dp"
+        android:layout_height="96dp"
+        android:layout_marginBottom="5dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/greenup"
+
+        app:layout_constraintBottom_toTopOf="@+id/vv_backward"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.895" />
+
+    <ImageButton
+        android:id="@+id/vv_leftway"
+        android:layout_width="99dp"
+        android:layout_height="96dp"
+        android:layout_marginStart="70dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/greenleft"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/vv_backward"
+        app:layout_constraintHorizontal_bias="0.788"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.363" />
+
+    <ImageButton
+        android:id="@+id/vv_rightway"
+        android:layout_width="99dp"
+        android:layout_height="96dp"
+        android:layout_marginEnd="70dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/greenright"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.122"
+        app:layout_constraintStart_toEndOf="@+id/vv_backward"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.363" />
+
+    <ImageButton
+        android:id="@+id/vv_backward"
+        android:layout_width="99dp"
+        android:layout_height="96dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/greendown"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/vv_rightway"
+        app:layout_constraintStart_toEndOf="@+id/vv_leftway"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.461" />
+
+    <Switch
+        android:id="@+id/vv_switch"
+        android:layout_width="88dp"
+        android:layout_height="38dp"
+        android:text="spin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.518" />
+
+
+
+    <ImageButton
+        android:id="@+id/vv_preTune"
+        android:layout_width="73dp"
+        android:layout_height="73dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/tune"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.952"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.98" />
+
+    <ImageButton
+        android:id="@+id/vv_builtInSound"
+        android:layout_width="88dp"
+        android:layout_height="85dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/sound"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.049"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.99" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
