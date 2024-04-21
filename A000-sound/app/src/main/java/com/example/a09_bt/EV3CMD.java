@@ -12,27 +12,42 @@ public class EV3CMD {
         return msg;
     }
 
-    public EV3CMD(String type, int ind) {
-        if (type.equals("MoveMotor_0xae_00")) {
+    public EV3CMD(String id, byte ... byteArgs) {
+        int index = 1;
+        byte port=0, type=0, mode=0;
+
+        if (byteArgs.length == 1) {
+            index = byteArgs[0];
+        }
+        else if (byteArgs.length == 3) {
+            port = byteArgs[0];
+            type = byteArgs[1];
+            mode = byteArgs[2];
+        }
+
+        if (id.equals("MoveMotor_0xae_00")) {
             mf_makeMotorMoveCmd();
         }
-        else if (type.equals("PlayTone_0x94_01")) {
+        else if (id.equals("PlayTone_0x94_01")) {
             mf_makePlayToneCmd();
         }
-        else if (type.equals("PlayToneFile_0x94_sound1")) {
+        else if (id.equals("PlayToneFile_0x94_sound1")) {
             mf_makePlayToneFileCmd_1();
         }
-        else if (type.equals("PlayToneFile_0x94_sound2")) {
+        else if (id.equals("PlayToneFile_0x94_sound2")) {
             mf_makePlayToneFileCmd_2();
         }
-        else if (type.equals("PlayToneFile_0x94_sound3")) {
+        else if (id.equals("PlayToneFile_0x94_sound3")) {
             mf_makePlayToneFileCmd_3();
         }
-        else if (type.equals("MotorStart_0xa6")) {
+        else if (id.equals("MotorStart_0xa6")) {
             mf_makeMotorStartCmd();
         }
-        else if (type.equals("MotorStart_0xa3")) {
+        else if (id.equals("MotorStart_0xa3")) {
             mf_makeMotorStopCmd();
+        }
+        else if (id.equals("ReadTouchSensor")) {
+            mf_makeReadTouchSensorCmd();
         }
     }
 
@@ -64,6 +79,15 @@ public class EV3CMD {
         msg.mv_setLC0(12, (byte) 0);
         msg.mv_setLC2(13, (short) 900);
         msg.mv_setLC2(16, (short) 180);
+    }
+
+    public void mf_makeMotorMoveContinuousCmd() {
+        msg = new CMDMsg(16, false, (byte) 0);
+        msg.mv_setOPCODE((byte) 0xa5);
+        msg.mv_setOPCMD((byte) 0x00);
+        msg.mv_setLC0(9, (byte) 0);
+        msg.mv_setLC0(10, (byte) 6);
+        msg.mv_setLC1(11, (byte) 50);
     }
 
     public void mf_makePlayToneCmd() {
@@ -124,6 +148,18 @@ public class EV3CMD {
         msg.mv_setOPCMD((byte) 0x02);
         msg.mv_setLC1(9, (byte) 50);
         msg.mv_setLCS(11, str);
+    }
+
+    public void mf_makeReadTouchSensorCmd() {
+        msg = new CMDMsg(15, true, (byte) 4);
+        msg.mv_setOPCODE((byte) 0x99);
+        msg.mv_setOPCMD((byte) 0x1b);
+        msg.mv_setLC0(9, (byte) 0); // LAYER
+        msg.mv_setLC0(10, (byte) 0x01); // Port 1
+        msg.mv_setLC0(11, (byte) 0x10); // Touch sensor type
+        msg.mv_setLC0(12, (byte) 0x00); // Touch sensor mode
+        msg.mv_setLC0(13, (byte) 0x01); // Return 1 value
+        msg.mv_setGV0(14, (byte) 0x60);
     }
 
 

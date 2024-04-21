@@ -12,8 +12,8 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import com.example.a09_bt.databinding.ActivityMainBinding;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -21,8 +21,12 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class EV3Service {
     private MainActivity cref_main;
+    private Timer sensorTimer;
 ////    private ActivityMainBinding cref_binding;
 
     // BT Variables
@@ -32,10 +36,7 @@ public class EV3Service {
     private BluetoothDevice mv_btDevice = null;
     private BluetoothSocket mv_btSocket = null;
 
-    //// HERE
-    // Data stream to/from NXT bluetooth
-    private InputStream mv_is = null;
-    private OutputStream mv_os = null;
+    private ConnectedThread mv_connectedThread = null;
 
     public EV3Service(MainActivity m) {
         cref_main = m;
@@ -147,10 +148,12 @@ public class EV3Service {
             mv_btSocket.connect();
 
             //// HERE
-            mv_is = mv_btSocket.getInputStream();
-            mv_os = mv_btSocket.getOutputStream();
             ////cref_binding.vvTvOut2.setText("Connect to " + bd.getName() + " at " + bd.getAddress());
             msg = "Connect to " + bd.getName() + " at " + bd.getAddress();
+
+            // Start the thread to connect with the given device
+            mv_connectedThread = new ConnectedThread(mv_btSocket);
+            mv_connectedThread.start();
         }
         catch (Exception e) {
             ////cref_binding.vvTvOut2.setText("Error interacting with remote device [" + e.getMessage() + "]");
@@ -163,8 +166,7 @@ public class EV3Service {
         String msg = "";
         try {
             mv_btSocket.close();
-            mv_is.close();
-            mv_os.close();
+            mv_connectedThread.cancel();
             ////cref_binding.vvTvOut2.setText(mv_btDevice.getName() + " is disconnect " );
             msg = mv_btDevice.getName() + " is disconnect ";
         } catch (Exception e) {
@@ -175,17 +177,51 @@ public class EV3Service {
     }
 
     public void mf_EV3SendNoReplyCmd(String type)  throws  Exception {
-        EV3CMD cmd = new EV3CMD(type, 0);
+        EV3CMD cmd = new EV3CMD(type);
+        int DELAY = 10;
         try {
-            mv_os.write(cmd.mf_getCmd().mf_getMsg());
-            mv_os.flush();
+            mv_connectedThread.write(cmd.mf_getCmd().mf_getMsg(), DELAY);
         }
         catch (Exception e) {
             throw new Exception("Error in " + cmd.mf_getType() + "(" + e.getMessage() + ")");
         }
+
         mf_consoleOut(cmd.mf_getCmd().mf_getMsg(), "EV3 ==", false);
     }
 
+    public byte[] mf_EV3SendReplyCmd(String type, byte ... byteArgs)  throws  Exception {
+        // I/Choreographer: Skipped 82 frames!  The application may be doing too much work on its main thread.
+        int DELAY = 10;
+        int WAIT_BEFORE_READ = 200;
+        int MSGCOUNTER = 0x1234;
+        EV3CMD cmd = new EV3CMD(type, byteArgs);
+        try {
+            mv_connectedThread.write(cmd.mf_getCmd().mf_getMsg(), DELAY);
+        } catch (Exception e) {
+            Log.i("EV3 out ", e.getMessage());
+            throw new Exception("Error in " + cmd.mf_getType() + "(" + e.getMessage() + ")");
+        }
+
+        mf_consoleOut(cmd.mf_getCmd().mf_getMsg(), "EV3 ==", false);
+
+        // pause is needed between send cmd and read
+        try {
+            Thread.sleep(WAIT_BEFORE_READ);
+        }
+        catch (Exception e) {
+            // Do nothing
+        }
+
+        int len = 15;
+        byte[] buf = new byte[len];
+        try {
+            buf = mv_connectedThread.read(MSGCOUNTER, 50);
+        } catch (Exception e) {
+            throw new Exception("Error in " + cmd.mf_getType() + "(" + e.getMessage() + ")");
+        }
+        mf_consoleOut(buf, "EV3 ->", true);
+        return buf;
+    }
     private void mf_consoleOut(byte[] buf, String tag, boolean flag) {
         String str = "";
         for (int i=0; i<buf.length; i++) {
@@ -194,6 +230,165 @@ public class EV3Service {
         Log.i(tag, str);
         if (flag) {
             Log.i("EV3 ->", new String(buf, StandardCharsets.UTF_8));
+        }
+    }
+
+    private class ConnectedThread extends Thread {
+        private String tag = "EV3 thread ";
+        private InputStream mis = null;
+        private OutputStream mos = null;
+
+        public ConnectedThread(BluetoothSocket socket) {
+            //Log.i(tag, "create ConnectedThread: ");
+
+            // Get the BluetoothSocket input and output streams
+            try {
+                mis = socket.getInputStream();
+                mos = socket.getOutputStream();
+            } catch (IOException e) {
+                Log.e(tag, "temp sockets not created", e);
+            }
+        }
+
+        public void run() {
+            //Log.i(tag, "\tBEGIN mConnectedThread");
+////            mBatteryLevel  = mgetBatteryLevel();
+
+            // repeat task -- ready
+////            if (mpisPollBattery)
+////                mpollBattery(5000);
+            //mpollBattery(60000);
+        }
+
+        private byte[] read(int command, int delay) {
+            // return bytes always 0xll, 0xhh as message counter 0x1234 here, 0x02(good) or 0x04(error msg), then returned values
+            int NUMBER_OF_TRIES = 5;
+            int INTERVAL = 50;
+            try {
+                int attempts = 0;
+                int bytesReady = 0;
+                byte[] sizeBuffer = new byte[2];
+                if (delay > 0) {
+                    try {
+                        Thread.sleep(delay);
+                    } catch (Exception e) {
+                        // Do nothing
+                    }
+                }
+
+                while (attempts < NUMBER_OF_TRIES) {
+                    Thread.sleep(INTERVAL);
+                    bytesReady = mis.available();
+
+                    if (bytesReady == 0) {
+                        //Log.i(tag,"\t\tNothing there, try again");
+                        attempts++;
+                    } else {
+                        //Log.i(tag,"\tThere are [" + bytesReady + "] waiting for us!");
+                        break;
+                    }
+                }
+
+                if (bytesReady < 2) {
+                    Log.e(tag, "No bytes ready " + bytesReady);
+                    return null;
+                }
+
+                int bytesRead = mis.read(sizeBuffer, 0, 2);
+                if (bytesRead != 2) {
+                    Log.e(tag, "Bytes buf error " + bytesReady);
+                    return null;
+                }
+
+                // calculate response size
+                bytesReady = sizeBuffer[0] + (sizeBuffer[1] << 8);
+                Log.i(tag, "Bytes to read mis [" + bytesReady + "]");
+
+                byte[] retBuf = new byte[bytesReady];
+                bytesRead = mis.read(retBuf);
+
+                if (bytesReady != bytesRead) {
+                    Log.e(tag, "Byte 0,1 size mismatch? " + bytesRead);
+                    return null;
+                }
+
+                int ret = retBuf[0] + (retBuf[1] << 8);
+                if (ret != command) {
+                    Log.e(tag, "Byte 2,3 msg counter mismatch " + ret);
+////                 return null;
+                }
+
+                if (retBuf[2] == 0x04) {
+                    Log.e(tag, "Byte 4 is 0x04, error return");
+////                 return null;
+                }
+
+                return retBuf;
+            } catch (Exception e) {
+                Log.e(tag, "Error in Read Response -> " + e.getMessage());
+                return null;
+            }
+        }
+
+        public void write(byte[] buffer, int delay) {
+            //Log.i(tag, "\t\t\tBEGIN mthreadWrite");
+            try {
+                if (delay > 0) {
+                    try {
+                        Thread.sleep(delay);
+                    }
+                    catch (Exception e) {
+                        // Do nothing
+                    }
+                }
+                mos.write(buffer);
+                mos.flush();
+            }
+            catch (IOException e) {
+                Log.e(tag, "Exception during write", e);
+            }
+        }
+
+        public void cancel() {
+            try {
+                mis.close();;
+                mos.close();
+                mis = null;
+                mos = null;
+                if (mv_btSocket != null && mv_btSocket.isConnected()) {
+                    mv_btSocket.close();
+                    ////Log.i(tag, "\tdisconnect (ed) to " + mNXTAddress);
+                }
+            }
+            catch (IOException e) {
+                Log.e(tag, "close() of connect socket failed", e);
+            }
+        }
+
+        public void startTouchMonitor(byte port, byte type, byte mode) {
+            if (sensorTimer != null) {
+                sensorTimer.cancel();
+            }
+            sensorTimer = new Timer();
+            sensorTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    try {
+                        byte[] response = mf_EV3SendReplyCmd("ReadTouchSensor");
+                        boolean touchDetected = (response[3] != 0); // Assuming the touch status is in this byte
+                        if (touchDetected) {
+                            handleTouchDetected();
+                        }
+                    } catch (Exception e) {
+                        Log.e("EV3Service", "Error reading touch sensor", e);
+                    }
+                }
+            }, 0, 100); // Poll every 100ms
+        }
+
+        private void handleTouchDetected() throws Exception {
+            // Commands to reverse the motor
+            mf_EV3SendNoReplyCmd("MotorStart_0xa3"); // Assuming this is the command to reverse the motor
         }
     }
 }
