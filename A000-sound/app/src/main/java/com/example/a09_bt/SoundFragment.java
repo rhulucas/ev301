@@ -16,7 +16,7 @@ public class SoundFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_move, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_sound, container, false);
         // Initialize views and set up UI components
         buttonSound1 = rootView.findViewById(R.id.buttonSound1);
         buttonSound2 = rootView.findViewById(R.id.buttonSound2);

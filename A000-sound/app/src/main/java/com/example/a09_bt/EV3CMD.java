@@ -49,6 +49,12 @@ public class EV3CMD {
         else if (id.equals("ReadTouchSensor")) {
             mf_makeReadTouchSensorCmd();
         }
+        else if(id.equals("readBattery")){
+            mf_makeBatteryLevelCmd();
+        }
+        else if (id.equals("ReadMotionSensor_0x99_1c")) {
+            mf_makeReadMotionSensorCmd();
+        }
     }
 
     private void mf_makeMotorStartCmd() {
@@ -161,6 +167,51 @@ public class EV3CMD {
         msg.mv_setLC0(13, (byte) 0x01); // Return 1 value
         msg.mv_setGV0(14, (byte) 0x60);
     }
+
+    // port 1-4 0x00-0x03, port A-D 0x10-0x13
+    // sensor
+    //  7,0 EV3-Large-Motor-Degree
+    //  7,1 EV3-Large-Motor-Rotation
+    // 16,0 EV3-Touch
+    // 29,0 EV3-Color-Reflected
+    // 30,0 EV3-Ultrasonic-Cm
+    public void mf_makeReadSensorsCmd(byte port, byte type, byte mode) {
+        msg = new CMDMsg(15, true, (byte) 4);
+        msg.mv_setOPCODE((byte) 0x99);
+        msg.mv_setOPCMD((byte) 0x1b);
+        msg.mv_setLC0(9, (byte) 0); // LAYER
+        msg.mv_setLC0(10, port);
+        msg.mv_setLC0(11, type);
+        msg.mv_setLC0(12, mode);
+        msg.mv_setLC0(13, (byte) 0x01); // return 1 value
+        msg.mv_setGV0(14, (byte) 0x60);
+    }
+
+    public void mf_makeBatteryLevelCmd() {
+        msg = new CMDMsg(10, true, (byte) 4);
+        msg.mv_setOPCODE((byte) 0x81);
+        msg.mv_setOPCMD((byte) 0x12);
+        msg.mv_setGV0(9,(byte) 0x60);
+    }
+
+    // page 50
+    // (Data8) LAYER – Specify chain layer number [0-3]
+    // (Data8) NO – Port number page 100
+    // (Data8) TYPE – Specify device type (0 = Don’t change type)
+    // (Data8) MODE – Device mode [0-7] (-1 = Don’t change mode)
+    // (Data8) VALUES – Number of return values
+    public void mf_makeReadMotionSensorCmd() {
+        msg = new CMDMsg(15, true, (byte) 4);
+        msg.mv_setOPCODE((byte) 0x99);
+        msg.mv_setOPCMD((byte) 0x1c);
+        msg.mv_setLC0(9, (byte) 0);     // LAYER
+        msg.mv_setLC0(10, (byte) 0x10); //
+        msg.mv_setLC0(11, (byte) 0x07); // page 100
+        msg.mv_setLC0(12, (byte) 0x00); // 7, 0 -> EV3-Large-Motor-Degree
+        msg.mv_setLC0(13, (byte) 0x01); // return 1 value
+        msg.mv_setGV0(14, (byte) 0x60);
+    }
+
 
 
 

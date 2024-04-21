@@ -12,7 +12,7 @@ public class SensorFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_move, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_sensor, container, false);
         // Initialize views and set up UI components
         return rootView;
     }
