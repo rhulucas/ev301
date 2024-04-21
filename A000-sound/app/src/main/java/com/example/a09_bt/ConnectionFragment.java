@@ -13,10 +13,11 @@ import androidx.fragment.app.Fragment;
 public class ConnectionFragment extends Fragment {
     private EV3Service mref_ev3;
     private TextView vvTvOut1;
+    private TextView vvBatteryText;
     private TextView vvTvOut2;
     private Button buttonConnect;
     private Button buttonDisconnect;
-    private Button buttonSound1;
+    private Button batteryButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -25,7 +26,8 @@ public class ConnectionFragment extends Fragment {
         vvTvOut2 = rootView.findViewById(R.id.vv_tvOut2);
         buttonConnect = rootView.findViewById(R.id.button);
         buttonDisconnect = rootView.findViewById(R.id.buttonDisconnect);
-        buttonSound1 = rootView.findViewById(R.id.buttonSound1);
+        batteryButton = rootView.findViewById(R.id.batteryButton);
+        vvBatteryText = rootView.findViewById(R.id.vv_batteryText);
         return rootView;
     }
 
@@ -61,12 +63,14 @@ public class ConnectionFragment extends Fragment {
             }
         });
 
-        buttonSound1.setOnClickListener(new View.OnClickListener() {
+        batteryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mref_ev3 != null) {
                     try {
-                        mref_ev3.mf_EV3SendNoReplyCmd("PlayToneFile_0x94_sound1");
+                         mref_ev3.mf_EV3SendReplyCmd("readBattery", (byte) 0x01, (byte) 0x10, (byte) 0x00);
+                         byte[] reply = mref_ev3.mf_EV3SendReplyCmd("readBattery");
+                         vvBatteryText.setText("Battery: " + reply[3] + "%");
                     } catch (Exception e) {
                         // Handle the exception
                         e.printStackTrace();
