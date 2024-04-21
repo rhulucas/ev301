@@ -121,6 +121,20 @@ public class EV3Service {
         }).start();
     }
 
+    public void startSpin() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mf_EV3SendNoReplyCmd("spin_start");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+
     public void stopMotor() {
         new Thread(new Runnable() {
             @Override

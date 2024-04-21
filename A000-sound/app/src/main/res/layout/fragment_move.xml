@@ -84,5 +84,17 @@
         app:layout_constraintVertical_bias="0.798"
         app:srcCompat="@drawable/down100" />
 
+    <Switch
+        android:id="@+id/vv_switch"
+        android:layout_width="88dp"
+        android:layout_height="38dp"
+        android:text="spin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.907"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.549" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

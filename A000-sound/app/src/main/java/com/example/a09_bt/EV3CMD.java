@@ -26,13 +26,12 @@ public class EV3CMD {
         }
 
         if (id.equals("forward")) {
-            //mf_makeMotorMoveCmd();
             mf_makeMotorStartCmd();
         }
         else if (id.equals("backward")) {
             mf_makeMotorBackwardCmd();
         }
-        else if (id.equals("up")) {
+        else if (id.equals("up")) { // Medium Motor Port D
             mf_makeMotorUpCmd();
         }
         else if (id.equals("down")) {
@@ -71,6 +70,9 @@ public class EV3CMD {
         }
         else if (id.equals("ReadMotionSensor_0x99_1c")) {
             mf_makeReadMotionSensorCmd();
+        }
+        else if (id.equals("spin_start")) {
+            mf_makeTurnLeftCmd();
         }
     }
 
