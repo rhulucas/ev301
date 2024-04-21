@@ -95,6 +95,32 @@ public class EV3Service {
         }).start();
     }
 
+    public void Up() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mf_EV3SendNoReplyCmd("up");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void Down() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mf_EV3SendNoReplyCmd("down");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     public void stopMotor() {
         new Thread(new Runnable() {
             @Override

@@ -32,8 +32,14 @@ public class EV3CMD {
         else if (id.equals("backward")) {
             mf_makeMotorBackwardCmd();
         }
+        else if (id.equals("up")) {
+            mf_makeMotorUpCmd();
+        }
+        else if (id.equals("down")) {
+            mf_makeMotorDownCmd();
+        }
         else if (id.equals("left")) {
-            mf_makeTurnLeftCmd(30);
+            mf_makeTurnLeftCmd();
         }
         else if (id.equals("right")) {
             mf_makeTurnRightCmd(30);
@@ -74,9 +80,32 @@ public class EV3CMD {
         msg.mv_setOPCMD((byte) 0x00);
         msg.mv_setLC0(9, (byte) 6);// ports B and C
         msg.mv_setLC1(10, (byte) 60); // power
+
         msg.mv_setLC0(12, (byte) 0xa6);
         msg.mv_setLC0(13, (byte) 0);
         msg.mv_setLC0(14, (byte) 6);
+    }
+
+    private void mf_makeMotorDownCmd() {
+        msg = new CMDMsg(15, false, (byte) 0);
+        msg.mv_setOPCODE((byte) 0xa4);
+        msg.mv_setOPCMD((byte) 0x00);
+        msg.mv_setLC0(9, (byte) 8);
+        msg.mv_setLC1(10, (byte) -60); // power
+        msg.mv_setLC0(12, (byte) 0xa6);
+        msg.mv_setLC0(13, (byte) 0);
+        msg.mv_setLC0(14, (byte) 8);
+    }
+
+    private void mf_makeMotorUpCmd() {
+        msg = new CMDMsg(15, false, (byte) 0);
+        msg.mv_setOPCODE((byte) 0xa4);
+        msg.mv_setOPCMD((byte) 0x00);
+        msg.mv_setLC0(9, (byte) 8);// medium motor
+        msg.mv_setLC1(10, (byte) 60); // power
+        msg.mv_setLC0(12, (byte) 0xa6);
+        msg.mv_setLC0(13, (byte) 0);
+        msg.mv_setLC0(14, (byte) 0x08); // port D
     }
 
     private void mf_makeMotorBackwardCmd() {
@@ -90,17 +119,31 @@ public class EV3CMD {
         msg.mv_setLC0(14, (byte) 6);
     }
 
-    public void mf_makeTurnLeftCmd(int speed) {
+    private void mf_makeMotorBLeftCmd() {
         msg = new CMDMsg(15, false, (byte) 0);
-
-        // motorB command definition
-        msg.mv_setOPCODE((byte) 0xA4);
+        msg.mv_setOPCODE((byte) 0xa4);
         msg.mv_setOPCMD((byte) 0x00);
-        msg.mv_setLC0(9, (byte) 0x02); // Motor B
-        msg.mv_setLC1(10, (byte) (-speed)); // Speed (LC1) - setting a negative speed for backward movement
+        msg.mv_setLC0(9, (byte) 2);// ports B
+        msg.mv_setLC1(10, (byte) -60); // power
         msg.mv_setLC0(12, (byte) 0xa6);
         msg.mv_setLC0(13, (byte) 0);
-        msg.mv_setLC0(14, (byte) 6);
+        msg.mv_setLC0(14, (byte) 2);
+    }
+
+    private void mf_makeMotorCLeftCmd() {
+        msg = new CMDMsg(15, false, (byte) 0);
+        msg.mv_setOPCODE((byte) 0xa4);
+        msg.mv_setOPCMD((byte) 0x00);
+        msg.mv_setLC0(9, (byte) 4);// ports C
+        msg.mv_setLC1(10, (byte) 60); // power
+        msg.mv_setLC0(12, (byte) 0xa6);
+        msg.mv_setLC0(13, (byte) 0);
+        msg.mv_setLC0(14, (byte) 4);
+    }
+
+    public void mf_makeTurnLeftCmd() {
+        mf_makeMotorBLeftCmd();
+        mf_makeMotorCLeftCmd();
     }
 
     public void mf_makeTurnRightCmd(int speed) {
