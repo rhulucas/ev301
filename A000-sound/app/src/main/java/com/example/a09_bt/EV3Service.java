@@ -56,6 +56,19 @@ public class EV3Service {
         }).start();
     }
 
+    public void MotorBackwardContinuous() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mf_EV3SendNoReplyCmd("backward");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     public void stopMotor() {
         new Thread(new Runnable() {
             @Override

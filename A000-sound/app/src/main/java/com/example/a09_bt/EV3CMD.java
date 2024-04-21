@@ -29,6 +29,10 @@ public class EV3CMD {
             //mf_makeMotorMoveCmd();
             mf_makeMotorStartCmd();
         }
+        else if (id.equals("backward")) {
+            mf_makeMotorBackwardCmd();
+        }
+
         else if (id.equals("PlayTone_0x94_01")) {
             mf_makePlayToneCmd();
         }
@@ -68,6 +72,19 @@ public class EV3CMD {
         msg.mv_setLC0(13, (byte) 0);
         msg.mv_setLC0(14, (byte) 6);
     }
+
+    private void mf_makeMotorBackwardCmd() {
+        msg = new CMDMsg(15, false, (byte) 0);
+        msg.mv_setOPCODE((byte) 0xa4);
+        msg.mv_setOPCMD((byte) 0x00);
+        msg.mv_setLC0(9, (byte) 6);// ports B and C
+        msg.mv_setLC1(10, (byte) -60); // power
+        msg.mv_setLC0(12, (byte) 0xa6);
+        msg.mv_setLC0(13, (byte) 0);
+        msg.mv_setLC0(14, (byte) 6);
+    }
+
+
 
     private void mf_makeMotorStopCmd() {
 //        msg = new CMDMsg(15, false, (byte) 0);
