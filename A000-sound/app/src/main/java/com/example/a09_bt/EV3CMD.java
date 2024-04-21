@@ -25,8 +25,9 @@ public class EV3CMD {
             mode = byteArgs[2];
         }
 
-        if (id.equals("MoveMotor_0xae_00")) {
-            mf_makeMotorMoveCmd();
+        if (id.equals("forward")) {
+            //mf_makeMotorMoveCmd();
+            mf_makeMotorStartCmd();
         }
         else if (id.equals("PlayTone_0x94_01")) {
             mf_makePlayToneCmd();
@@ -43,7 +44,7 @@ public class EV3CMD {
         else if (id.equals("MotorStart_0xa6")) {
             mf_makeMotorStartCmd();
         }
-        else if (id.equals("MotorStart_0xa3")) {
+        else if (id.equals("MotorStop_0xa3")) {
             mf_makeMotorStopCmd();
         }
         else if (id.equals("ReadTouchSensor")) {
@@ -61,39 +62,35 @@ public class EV3CMD {
         msg = new CMDMsg(15, false, (byte) 0);
         msg.mv_setOPCODE((byte) 0xa4);
         msg.mv_setOPCMD((byte) 0x00);
-        msg.mv_setLC0(9, (byte) 6);
-        msg.mv_setLC1(10, (byte) 60);
+        msg.mv_setLC0(9, (byte) 6);// ports B and C
+        msg.mv_setLC1(10, (byte) 60); // power
         msg.mv_setLC0(12, (byte) 0xa6);
         msg.mv_setLC0(13, (byte) 0);
         msg.mv_setLC0(14, (byte) 6);
     }
 
     private void mf_makeMotorStopCmd() {
-        msg = new CMDMsg(15, false, (byte) 0);
+//        msg = new CMDMsg(15, false, (byte) 0);
+//        msg.mv_setOPCODE((byte) 0xa3);
+//        msg.mv_setOPCMD((byte) 0x00);
+//        msg.mv_setLC0(9, (byte) 6); // ports B and C
+//        msg.mv_setLC0(10, (byte) 0);
+
+        msg = new CMDMsg(11, false, (byte) 0);
         msg.mv_setOPCODE((byte) 0xa3);
         msg.mv_setOPCMD((byte) 0x00);
-        msg.mv_setLC0(9, (byte) 6);
-        msg.mv_setLC0(10, (byte) 0);
+        msg.mv_setLC0(9, (byte) 0x0f); // Stop all motors (ports A, B, C, and D)
     }
 
     private void mf_makeMotorMoveCmd() {
-        msg = new CMDMsg(20, false, (byte) 0);
+        msg = new CMDMsg(16, false, (byte) 0);
         msg.mv_setOPCODE((byte) 0xae);
         msg.mv_setOPCMD((byte) 0x00);
-        msg.mv_setLC0(9, (byte) 6);
-        msg.mv_setLC1(10, (byte) -50);
-        msg.mv_setLC0(12, (byte) 0);
-        msg.mv_setLC2(13, (short) 900);
-        msg.mv_setLC2(16, (short) 180);
-    }
-
-    public void mf_makeMotorMoveContinuousCmd() {
-        msg = new CMDMsg(16, false, (byte) 0);
-        msg.mv_setOPCODE((byte) 0xa5);
-        msg.mv_setOPCMD((byte) 0x00);
-        msg.mv_setLC0(9, (byte) 0);
-        msg.mv_setLC0(10, (byte) 6);
-        msg.mv_setLC1(11, (byte) 50);
+        msg.mv_setLC0(9, (byte) 6); // ports B and C
+        msg.mv_setLC1(10, (byte) 50); //speed
+        msg.mv_setLC0(12, (byte) 0); // ramp up steps, set to 0, meaning the motors will start at full speed immediately.
+        msg.mv_setLC2(13, (short) 900); // duration of the motor movement in degrees, where 900 represents 2.5 rotations (900 degrees).
+        msg.mv_setLC2(16, (short) 180); // specifies the ramp down steps, which is set to 180 degrees (0.5 rotations) in this case, allowing for a smooth stop at the end of the movement.
     }
 
     public void mf_makePlayToneCmd() {
@@ -115,10 +112,6 @@ public class EV3CMD {
     //DownloadSucces.rsf                   6599  681C88B5930DE152C0BB096F890C492F
     //Click.rsf                             173  A16F9F1FDDACF56EDF81B4CD968826B4
     public void mf_makePlayToneFileCmd_1() {
-        //String str = "./ui/DownloadSuccess";
-        //String str = "./ui/OverpowerAlert";
-        //String str = "./ui/GeneralAlarm";
-        //String str = "./ui/PowerDown";
         String str = "./ui/Startup";
 
         msg = new CMDMsg(12+str.length()+1, false, (byte) 0);
@@ -129,11 +122,7 @@ public class EV3CMD {
     }
 
     public void mf_makePlayToneFileCmd_2() {
-        //String str = "./ui/DownloadSuccess";
-        //String str = "./ui/OverpowerAlert";
         String str = "./ui/GeneralAlarm";
-        //String str = "./ui/PowerDown";
-        //String str = "./ui/Startup";
 
         msg = new CMDMsg(12+str.length()+1, false, (byte) 0);
         msg.mv_setOPCODE((byte) 0x94);
@@ -143,11 +132,7 @@ public class EV3CMD {
     }
 
     public void mf_makePlayToneFileCmd_3() {
-        //String str = "./ui/DownloadSuccess";
-        //String str = "./ui/OverpowerAlert";
-        //String str = "./ui/GeneralAlarm";
         String str = "./ui/PowerDown";
-        //String str = "./ui/Startup";
 
         msg = new CMDMsg(12+str.length()+1, false, (byte) 0);
         msg.mv_setOPCODE((byte) 0x94);
@@ -211,8 +196,5 @@ public class EV3CMD {
         msg.mv_setLC0(13, (byte) 0x01); // return 1 value
         msg.mv_setGV0(14, (byte) 0x60);
     }
-
-
-
 
 }

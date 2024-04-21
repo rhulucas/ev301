@@ -43,6 +43,32 @@ public class EV3Service {
 ////        cref_binding = m.cf_getBinding();
     }
 
+    public void startMotorMoveContinuous() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mf_EV3SendNoReplyCmd("forward");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void stopMotor() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mf_EV3SendNoReplyCmd("MotorStop_0xa3");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     // How to remove view? not easy
     // Just one option - tuple (Pair in Java)
     public Pair<String, String> mf_checkBTPermissions() {
@@ -390,5 +416,7 @@ public class EV3Service {
             // Commands to reverse the motor
             mf_EV3SendNoReplyCmd("MotorStart_0xa3"); // Assuming this is the command to reverse the motor
         }
+
+
     }
 }
