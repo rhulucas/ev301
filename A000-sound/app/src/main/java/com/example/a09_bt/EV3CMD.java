@@ -42,7 +42,7 @@ public class EV3CMD {
             mf_makeTurnLeftCmd();
         }
         else if (id.equals("right")) {
-            mf_makeTurnRightCmd(30);
+            mf_makeTurnRightCmd();
         }
 
         else if (id.equals("PlayTone_0x94_01")) {
@@ -74,7 +74,7 @@ public class EV3CMD {
         }
     }
 
-    private void mf_makeMotorStartCmd() {
+    private void mf_makeMotorStartCmd() { // Big Motor forward
         msg = new CMDMsg(15, false, (byte) 0);
         msg.mv_setOPCODE((byte) 0xa4);
         msg.mv_setOPCMD((byte) 0x00);
@@ -86,7 +86,7 @@ public class EV3CMD {
         msg.mv_setLC0(14, (byte) 6);
     }
 
-    private void mf_makeMotorDownCmd() {
+    private void mf_makeMotorDownCmd() { // medium motor down
         msg = new CMDMsg(15, false, (byte) 0);
         msg.mv_setOPCODE((byte) 0xa4);
         msg.mv_setOPCMD((byte) 0x00);
@@ -97,7 +97,7 @@ public class EV3CMD {
         msg.mv_setLC0(14, (byte) 8);
     }
 
-    private void mf_makeMotorUpCmd() {
+    private void mf_makeMotorUpCmd() { // medium motor up
         msg = new CMDMsg(15, false, (byte) 0);
         msg.mv_setOPCODE((byte) 0xa4);
         msg.mv_setOPCMD((byte) 0x00);
@@ -108,7 +108,7 @@ public class EV3CMD {
         msg.mv_setLC0(14, (byte) 0x08); // port D
     }
 
-    private void mf_makeMotorBackwardCmd() {
+    private void mf_makeMotorBackwardCmd() { // Big Motor backward
         msg = new CMDMsg(15, false, (byte) 0);
         msg.mv_setOPCODE((byte) 0xa4);
         msg.mv_setOPCMD((byte) 0x00);
@@ -119,7 +119,7 @@ public class EV3CMD {
         msg.mv_setLC0(14, (byte) 6);
     }
 
-    private void mf_makeMotorBLeftCmd() {
+    private void mf_makeMotorBLeftCmd() { // Left turn for Port B
         msg = new CMDMsg(15, false, (byte) 0);
         msg.mv_setOPCODE((byte) 0xa4);
         msg.mv_setOPCMD((byte) 0x00);
@@ -130,7 +130,7 @@ public class EV3CMD {
         msg.mv_setLC0(14, (byte) 2);
     }
 
-    private void mf_makeMotorCLeftCmd() {
+    private void mf_makeMotorCLeftCmd() { // Left turn for Port C
         msg = new CMDMsg(15, false, (byte) 0);
         msg.mv_setOPCODE((byte) 0xa4);
         msg.mv_setOPCMD((byte) 0x00);
@@ -146,19 +146,34 @@ public class EV3CMD {
         mf_makeMotorCLeftCmd();
     }
 
-    public void mf_makeTurnRightCmd(int speed) {
-
+    ////////////
+    private void mf_makeMotorBRightCmd() { // Right turn for Port B
         msg = new CMDMsg(15, false, (byte) 0);
-        // motorC command definition
-        msg.mv_setOPCODE((byte) 0xA4);
+        msg.mv_setOPCODE((byte) 0xa4);
         msg.mv_setOPCMD((byte) 0x00);
-        msg.mv_setLC0(9, (byte) 0x04); // Motor C
-        msg.mv_setLC1(10, (byte) (-speed)); // Speed (LC1) - setting a positive speed for forward movement
-        msg.mv_setLC0(12, (byte) 0xa6); // Ramp-up duration (immediate start)
-        msg.mv_setLC0(13, (byte) 0x00);
-        msg.mv_setLC0(14, (byte) 0x06); // Brake at the end
+        msg.mv_setLC0(9, (byte) 2);// ports B
+        msg.mv_setLC1(10, (byte) 60); // power
+        msg.mv_setLC0(12, (byte) 0xa6);
+        msg.mv_setLC0(13, (byte) 0);
+        msg.mv_setLC0(14, (byte) 2);
     }
 
+    private void mf_makeMotorCRightCmd() { // Right turn for Port C
+        msg = new CMDMsg(15, false, (byte) 0);
+        msg.mv_setOPCODE((byte) 0xa4);
+        msg.mv_setOPCMD((byte) 0x00);
+        msg.mv_setLC0(9, (byte) 4);// ports C
+        msg.mv_setLC1(10, (byte) -60); // power
+        msg.mv_setLC0(12, (byte) 0xa6);
+        msg.mv_setLC0(13, (byte) 0);
+        msg.mv_setLC0(14, (byte) 4);
+    }
+
+    public void mf_makeTurnRightCmd() {
+        mf_makeMotorBRightCmd();
+        mf_makeMotorCRightCmd();
+    }
+    ////////////
 
     private void mf_makeMotorStopCmd() {
 //        msg = new CMDMsg(15, false, (byte) 0);
