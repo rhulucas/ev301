@@ -35,6 +35,9 @@ public class EV3CMD {
         else if (id.equals("left")) {
             mf_makeTurnLeftCmd(30);
         }
+        else if (id.equals("right")) {
+            mf_makeTurnRightCmd(30);
+        }
 
         else if (id.equals("PlayTone_0x94_01")) {
             mf_makePlayToneCmd();
@@ -107,7 +110,7 @@ public class EV3CMD {
         msg.mv_setOPCODE((byte) 0xA4);
         msg.mv_setOPCMD((byte) 0x00);
         msg.mv_setLC0(9, (byte) 0x04); // Motor C
-        msg.mv_setLC1(10, (byte) speed); // Speed (LC1) - setting a positive speed for forward movement
+        msg.mv_setLC1(10, (byte) (-speed)); // Speed (LC1) - setting a positive speed for forward movement
         msg.mv_setLC0(12, (byte) 0xa6); // Ramp-up duration (immediate start)
         msg.mv_setLC0(13, (byte) 0x00);
         msg.mv_setLC0(14, (byte) 0x06); // Brake at the end

@@ -28,6 +28,7 @@ public class MoveFragment extends Fragment{
         vvForwardButton = rootView.findViewById(R.id.vv_forward);
         vvBackwardButton = rootView.findViewById(R.id.vv_backward);
         vvLeft = rootView.findViewById(R.id.vv_left);
+        vvRight = rootView.findViewById(R.id.vv_right);
 
         return rootView;
     }
@@ -118,6 +119,36 @@ public class MoveFragment extends Fragment{
                         view.setScaleX(0.9f);
                         view.setScaleY(0.9f);
                         if (view.getId() == R.id.vv_left) {
+                            mref_ev3.stopMotor();
+                        }
+                        // Handle other button release events
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        vvRight.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Button pressed
+                        view.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.button_pressed));
+                        view.setScaleX(1.3f);
+                        view.setScaleY(1.3f);
+                        if (view.getId() == R.id.vv_right) {
+                            mref_ev3.Right();
+                        }
+                        // Handle other button press events
+                        return true;
+
+                    case MotionEvent.ACTION_UP:
+                        // Button released
+                        view.setBackgroundColor(ContextCompat.getColor(view.getContext(), R.color.button_released));
+                        view.setScaleX(0.9f);
+                        view.setScaleY(0.9f);
+                        if (view.getId() == R.id.vv_right) {
                             mref_ev3.stopMotor();
                         }
                         // Handle other button release events

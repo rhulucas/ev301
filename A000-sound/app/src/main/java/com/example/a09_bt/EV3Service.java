@@ -82,6 +82,19 @@ public class EV3Service {
         }).start();
     }
 
+    public void Right() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    mf_EV3SendNoReplyCmd("right");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
     public void stopMotor() {
         new Thread(new Runnable() {
             @Override
