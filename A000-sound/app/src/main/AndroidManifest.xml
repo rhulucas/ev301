@@ -27,7 +27,8 @@ in your app if it targets Android 12 or higher:
         android:theme="@style/Theme.A09BT">
         <activity
             android:name="com.example.a09_bt.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
