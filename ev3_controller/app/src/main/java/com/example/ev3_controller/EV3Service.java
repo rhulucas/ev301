@@ -4,6 +4,10 @@ import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
@@ -42,6 +46,30 @@ public class EV3Service {
         cref_main = m;
 ////        cref_binding = m.cf_getBinding();
     }
+    private final BroadcastReceiver bluetoothConnectionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+                handleBluetoothDisconnection();
+            }
+        }
+    };
+
+    private void handleBluetoothDisconnection() {
+        // Logic to handle Bluetooth disconnection
+        Toast.makeText(cref_main, "Robot has shut down or lost connection.", Toast.LENGTH_LONG).show();
+    }
+
+    public void registerReceiver() {
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        cref_main.registerReceiver(bluetoothConnectionReceiver, filter);
+    }
+
+    public void unregisterReceiver() {
+        cref_main.unregisterReceiver(bluetoothConnectionReceiver);
+    }
+
 
     public void startMotorMoveContinuous() {
         new Thread(new Runnable() {

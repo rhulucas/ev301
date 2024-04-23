@@ -21,20 +21,43 @@ public class MainActivity extends AppCompatActivity {
         return mref_ev3;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        mref_ev3 = new EV3Service(MainActivity.this);
+        // Initialize EV3Service with context
+        mref_ev3 = new EV3Service(this);
 
-        // Set up the ViewPager2 and the adapter
+        // Setup UI components like ViewPager2 and BottomNavigationView
+        setupUIComponents();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Register the Bluetooth connection receiver when the activity resumes
+        if (mref_ev3 != null) {
+            mref_ev3.registerReceiver();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Unregister the Bluetooth connection receiver when the activity is paused
+        if (mref_ev3 != null) {
+            mref_ev3.unregisterReceiver();
+        }
+    }
+
+    private void setupUIComponents() {
         ViewPager2 viewPager = findViewById(R.id.view_pager);
         FragmentStateAdapter pagerAdapter = new ScreenSlidePagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
 
-        // Set up the BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
@@ -54,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
-        // Sync the ViewPager2 with the BottomNavigationView
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
