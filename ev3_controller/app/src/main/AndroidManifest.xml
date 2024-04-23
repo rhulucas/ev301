@@ -17,6 +17,7 @@ in your app if it targets Android 12 or higher:
     <!-- Needed only if your app communicates with already-paired Bluetooth
          devices. -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
