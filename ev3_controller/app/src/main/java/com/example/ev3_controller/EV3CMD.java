@@ -44,9 +44,82 @@ public class EV3CMD {
             mf_makeTurnRightCmd();
         }
 
-        else if (id.equals("PlayTone_0x94_01")) {
-            mf_makePlayToneCmd();
+        else if (id.equals("whiteKey1")) {
+            mf_makePlayToneCmd(0xf7);
         }
+        else if (id.equals("whiteKey2")) {
+            mf_makePlayToneCmd(0x106);
+        }
+        else if (id.equals("whiteKey3")) {
+            mf_makePlayToneCmd(0x126);
+        }
+        else if (id.equals("whiteKey4")) {
+            mf_makePlayToneCmd(0x14a);
+        }
+        else if (id.equals("whiteKey5")) {
+            mf_makePlayToneCmd(0x15d);
+        }
+        else if (id.equals("whiteKey6")) {
+            mf_makePlayToneCmd(0x188);
+        }
+        else if (id.equals("whiteKey7")) {
+            mf_makePlayToneCmd(0x1b8);
+        }
+        else if (id.equals("whiteKey8")) {
+            mf_makePlayToneCmd(0x1ee);
+        }
+        else if (id.equals("whiteKey9")) {
+            mf_makePlayToneCmd(0x20b);
+        }
+        else if (id.equals("whiteKey10")) {
+            mf_makePlayToneCmd(0x24b);
+        }
+        else if (id.equals("whiteKey11")) {
+            mf_makePlayToneCmd(0x293);
+        }
+        else if (id.equals("whiteKey12")) {
+            mf_makePlayToneCmd(0x2DB);
+        }
+        else if (id.equals("whiteKey13")) {
+            mf_makePlayToneCmd(0x32B);
+        }
+        else if (id.equals("whiteKey14")) {
+            mf_makePlayToneCmd(0x383);
+        }
+        else if (id.equals("blackKey1")) {
+            mf_makePlayToneCmd(0xe9);
+        }
+        else if (id.equals("blackKey2")) {
+            mf_makePlayToneCmd(0x115);
+        }
+        else if (id.equals("blackKey3")) {
+            mf_makePlayToneCmd(0x137);
+        }
+        else if (id.equals("blackKey4")) {
+            mf_makePlayToneCmd(0x172);
+        }
+        else if (id.equals("blackKey5")) {
+            mf_makePlayToneCmd(0x19f);
+        }
+        else if (id.equals("blackKey6")) {
+            mf_makePlayToneCmd(0x1d2);
+        }
+        else if (id.equals("blackKey7")) {
+            mf_makePlayToneCmd(0x22a);
+        }
+        else if (id.equals("blackKey8")) {
+            mf_makePlayToneCmd(0x26e);
+        }
+        else if (id.equals("blackKey9")) {
+            mf_makePlayToneCmd(0x2ff);
+        }
+        else if (id.equals("blackKey10")) {
+            mf_makePlayToneCmd(0x353);
+        }
+        else if (id.equals("blackKey11")) {
+            mf_makePlayToneCmd(0x37f);
+        }
+
         else if (id.equals("PlayToneFile_0x94_sound1")) {
             mf_makePlayToneFileCmd_1();
         }
@@ -175,50 +248,27 @@ public class EV3CMD {
         mf_makeMotorBRightCmd();
         mf_makeMotorCRightCmd();
     }
-    ////////////
 
     private void mf_makeMotorStopCmd() {
-//        msg = new CMDMsg(15, false, (byte) 0);
-//        msg.mv_setOPCODE((byte) 0xa3);
-//        msg.mv_setOPCMD((byte) 0x00);
-//        msg.mv_setLC0(9, (byte) 6); // ports B and C
-//        msg.mv_setLC0(10, (byte) 0);
-
         msg = new CMDMsg(11, false, (byte) 0);
         msg.mv_setOPCODE((byte) 0xa3);
         msg.mv_setOPCMD((byte) 0x00);
         msg.mv_setLC0(9, (byte) 0x0f); // Stop all motors (ports A, B, C, and D)
     }
 
-    private void mf_makeMotorMoveCmd() {
+    public void mf_makePlayToneCmd(int frequency) {
         msg = new CMDMsg(16, false, (byte) 0);
-        msg.mv_setOPCODE((byte) 0xae);
-        msg.mv_setOPCMD((byte) 0x00);
-        msg.mv_setLC0(9, (byte) 6); // ports B and C
-        msg.mv_setLC1(10, (byte) 50); //speed
-        msg.mv_setLC0(12, (byte) 0); // ramp up steps, set to 0, meaning the motors will start at full speed immediately.
-        msg.mv_setLC2(13, (short) 900); // duration of the motor movement in degrees, where 900 represents 2.5 rotations (900 degrees).
-        msg.mv_setLC2(16, (short) 180); // specifies the ramp down steps, which is set to 180 degrees (0.5 rotations) in this case, allowing for a smooth stop at the end of the movement.
+        msg.mv_setOPCODE((byte) 0x94); // 7
+        msg.mv_setOPCMD((byte) 0x01); // 8
+        msg.mv_setLC0(9, (byte) 0x01); // 9
+        msg.mv_setLC0(10, (byte) 0x82);
+        msg.mv_setLC0(11, (byte) (frequency & 0xFF));
+        msg.mv_setLC0(12, (byte) ((frequency >> 8) & 0xFF));
+        msg.mv_setLC0(13, (byte) 0x82);
+        msg.mv_setLC0(14, (byte) 0x23);
+        msg.mv_setLC0(15, (byte) 0x01);
     }
 
-    public void mf_makePlayToneCmd() {
-        msg = new CMDMsg(17, false, (byte) 0);
-        msg.mv_setOPCODE((byte) 0x94);
-        msg.mv_setOPCMD((byte) 0x01);
-        msg.mv_setLC1(9, (byte) 2);
-        msg.mv_setLC2(11, (short) 1000);
-        msg.mv_setLC2(14, (short) 1000);
-    }
-
-    //https://ev3-dc.readthedocs.io/en/latest/examples_filesystem.html
-    // robot sound file             size (bytes)  md5-checksum
-    //---------------------------------------------------------------------------
-    //Startup.rsf                          3109  7BE0A201F57917BC0DDE508E63DD7AD8
-    //PowerDown.rsf                        7939  2381EF46C5166BFF0B5852369E5A2CC7
-    //OverpowerAlert.rsf                   8553  BE802DF67CBBC4E4A40C223BFFF4C14A
-    //GeneralAlarm.rsf                     7300  A40C190AF86C8FA9A7FE9143B36B86EC
-    //DownloadSucces.rsf                   6599  681C88B5930DE152C0BB096F890C492F
-    //Click.rsf                             173  A16F9F1FDDACF56EDF81B4CD968826B4
     public void mf_makePlayToneFileCmd_1() {
         String str = "./ui/Startup";
 
@@ -287,12 +337,6 @@ public class EV3CMD {
         msg.mv_setGV0(9,(byte) 0x60);
     }
 
-    // page 50
-    // (Data8) LAYER – Specify chain layer number [0-3]
-    // (Data8) NO – Port number page 100
-    // (Data8) TYPE – Specify device type (0 = Don’t change type)
-    // (Data8) MODE – Device mode [0-7] (-1 = Don’t change mode)
-    // (Data8) VALUES – Number of return values
     public void mf_makeReadMotionSensorCmd() {
         msg = new CMDMsg(15, true, (byte) 4);
         msg.mv_setOPCODE((byte) 0x99);
