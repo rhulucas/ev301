@@ -1,0 +1,8 @@
+
+<!-- res/drawable/key_selector.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/key_pressed" android:state_pressed="true" />
+    <!-- Blue color drawable for pressed state -->
+    <item android:drawable="@drawable/blackkey" />
+    <!-- Transparent drawable for normal state -->
+</selector>
