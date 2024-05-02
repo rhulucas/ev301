@@ -1,5 +1,5 @@
 # An Android App For controlling Lego EV3 Robot
-## [Watch the demo video here!](https://youtu.be/u-k7rly9ttU?si=yZgyqXcudQUa3oO9)
+## [Checkout the demo video here ^_^](https://youtu.be/u-k7rly9ttU?si=yZgyqXcudQUa3oO9)
 ### Developed using Java and Android Studio, this Android app  controls a LEGO EV3 robot using Bluetooth connectivity. 
 ![Screenshot 2024-04-23 at 8 54 32 PM](https://github.com/rhulucas/ev301/assets/73403516/19f3e0a5-69ff-4273-a899-249af2defc14)
 
